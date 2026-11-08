@@ -1,1 +1,26 @@
-
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1021" />
+    <title>Pong</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="game-shell">
+      <h1>Pong</h1>
+      <div class="hud" aria-label="Marcador">
+        <div class="score-box"><span>Jugador</span><strong id="playerScore">0</strong></div>
+        <div class="score-box"><span>CPU</span><strong id="cpuScore">0</strong></div>
+      </div>
+      <canvas id="gameCanvas" width="900" height="500" aria-label="Juego Pong"></canvas>
+      <div class="controls">
+        <p>Controles: W / S o ↑ / ↓ para mover la raqueta. Primero en llegar a 5 gana.</p>
+        <button id="startBtn" type="button">Empezar partida</button>
+      </div>
+      <p id="status" class="status" aria-live="polite">¡Prepárate para jugar!</p>
+    </main>
+    <script src="script.js"></script>
+  </body>
+</html>
