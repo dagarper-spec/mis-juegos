@@ -18,6 +18,7 @@ const cpu = { x: WIDTH - 42, y: (HEIGHT - PADDLE_H) / 2, score: 0 };
 const ball = { x: WIDTH / 2, y: HEIGHT / 2, vx: 5, vy: 2, speed: 6 };
 let running = false;
 let finished = false;
+let activePointerId = null;
 
 function resetBall(direction = Math.random() < 0.5 ? -1 : 1) {
   ball.x = WIDTH / 2;
@@ -118,6 +119,17 @@ function frame() {
   requestAnimationFrame(frame);
 }
 
+function movePlayerToPointer(event) {
+  if (!running) return;
+
+  const rect = canvas.getBoundingClientRect();
+  const scaleY = HEIGHT / rect.height;
+  const pointerY = (event.clientY - rect.top) * scaleY;
+
+  player.y = pointerY - PADDLE_H / 2;
+  clampPaddles();
+}
+
 window.addEventListener('keydown', (event) => {
   const key = event.key.toLowerCase();
   if (['w', 's', 'arrowup', 'arrowdown'].includes(key)) event.preventDefault();
@@ -125,6 +137,25 @@ window.addEventListener('keydown', (event) => {
 });
 window.addEventListener('keyup', (event) => keys.delete(event.key.toLowerCase()));
 window.addEventListener('blur', () => keys.clear());
+
+canvas.addEventListener('pointerdown', (event) => {
+  if (event.pointerType === 'mouse' && event.button !== 0) return;
+  event.preventDefault();
+  activePointerId = event.pointerId;
+  canvas.setPointerCapture(event.pointerId);
+  movePlayerToPointer(event);
+});
+canvas.addEventListener('pointermove', (event) => {
+  if (event.pointerId === activePointerId) {
+    event.preventDefault();
+    movePlayerToPointer(event);
+  }
+});
+function releasePointer(event) {
+  if (event.pointerId === activePointerId) activePointerId = null;
+}
+canvas.addEventListener('pointerup', releasePointer);
+canvas.addEventListener('pointercancel', releasePointer);
 
 startBtn.addEventListener('click', () => {
   if (running) {
@@ -141,7 +172,7 @@ startBtn.addEventListener('click', () => {
   }
   resetBall();
   running = true;
-  statusEl.textContent = '¡A jugar!';
+  statusEl.textContent = '¡A jugar! Arrastra el dedo por el campo para mover la raqueta.';
   startBtn.textContent = 'Pausar partida';
 });
 
