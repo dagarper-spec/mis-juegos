@@ -2,126 +2,22 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="refresh" content="0;url=movil.html">
   <meta name="theme-color" content="#101210">
-  <title>Umbral — Exploración en primera persona</title>
+  <title>Umbral — Exploración</title>
   <style>
-    :root{color-scheme:dark;--ink:#f2eee4;--muted:#a9a69a;--gold:#e4b976;--line:rgba(242,238,228,.18)}
-    *{box-sizing:border-box}html,body{height:100%;margin:0;overflow:hidden;background:#101210;color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}canvas{display:block;width:100%;height:100%;outline:0}
-    #ui{position:fixed;inset:0;pointer-events:none}.topbar{position:absolute;top:26px;left:30px;right:30px;display:flex;justify-content:space-between;align-items:flex-start;text-transform:uppercase;letter-spacing:.18em;font-size:10px;color:#d4d0c3}.brand{font-weight:700;letter-spacing:.28em}.brand small{display:block;margin-top:8px;color:#8f9188;font-size:9px;letter-spacing:.22em;font-weight:400}.status{display:flex;align-items:center;gap:9px;color:#c7c0ad}.dot{width:6px;height:6px;background:#d5a967;border-radius:50%;box-shadow:0 0 12px #d5a967}.bottom{position:absolute;left:30px;right:30px;bottom:25px;display:flex;align-items:flex-end;justify-content:space-between;color:#c7c2b5}.location{font-family:Georgia,serif;font-size:20px;letter-spacing:.02em}.location small{display:block;margin-top:6px;font:9px ui-sans-serif,system-ui;letter-spacing:.2em;text-transform:uppercase;color:#9e9b90}.keys{display:flex;gap:16px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:#aaa79d}.key{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 5px;border:1px solid var(--line);border-radius:4px;margin-right:5px;color:#e3ddcf;font-size:9px}.crosshair{position:absolute;left:50%;top:50%;width:18px;height:18px;transform:translate(-50%,-50%);opacity:.75}.crosshair:before,.crosshair:after{content:"";position:absolute;background:rgba(241,232,210,.9);box-shadow:0 0 6px rgba(0,0,0,.7)}.crosshair:before{width:1px;height:14px;left:8px;top:2px}.crosshair:after{height:1px;width:14px;top:8px;left:2px}
-    #overlay{position:fixed;inset:0;z-index:5;display:grid;place-items:center;background:radial-gradient(ellipse at center,rgba(17,19,17,.48),rgba(8,10,9,.83));transition:opacity .45s,visibility .45s}#overlay.hidden{opacity:0;visibility:hidden}.card{width:min(500px,calc(100% - 40px));padding:clamp(28px,6vw,58px);border:1px solid rgba(238,223,194,.2);background:linear-gradient(145deg,rgba(27,30,27,.88),rgba(15,17,15,.9));box-shadow:0 24px 90px #0008;backdrop-filter:blur(12px)}.eyebrow{font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:var(--gold)}h1{font:400 clamp(38px,7vw,62px)/.98 Georgia,serif;letter-spacing:-.04em;margin:19px 0 16px}.desc{max-width:350px;color:#b8b6ac;font-size:13px;line-height:1.75}.start{margin-top:30px;display:flex;align-items:center;gap:13px}.start button{pointer-events:auto;border:0;background:#dfb578;color:#1c1b17;padding:14px 19px;font:600 10px ui-sans-serif,system-ui;letter-spacing:.17em;text-transform:uppercase;cursor:pointer;transition:background .2s,transform .2s}.start button:hover{background:#f0cb91;transform:translateY(-1px)}.start span{font-size:10px;color:#96958c;letter-spacing:.06em}.instructions{border-top:1px solid var(--line);margin-top:29px;padding-top:18px;display:flex;gap:20px;color:#aaa99f;font-size:9px;line-height:1.8;text-transform:uppercase;letter-spacing:.12em}.instructions strong{color:#e1dbcd;font-weight:500;display:block}.vignette{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 140px 35px rgba(0,0,0,.56)}@media(max-width:600px){.topbar{top:18px;left:18px;right:18px}.bottom{left:18px;right:18px;bottom:17px}.keys{gap:7px}.keys .optional{display:none}.location{font-size:17px}.instructions{gap:12px}.status{font-size:8px}}
+    body{min-height:100vh;margin:0;display:grid;place-items:center;padding:24px;box-sizing:border-box;background:#101210;color:#f2eee4;font-family:system-ui,sans-serif;text-align:center}
+    main{max-width:440px;padding:32px;border:1px solid #ffffff30;border-radius:18px;background:#ffffff0b}
+    a{display:inline-block;margin-top:12px;padding:14px 24px;border-radius:999px;background:#e4b976;color:#17140f;font-weight:700;text-decoration:none}
   </style>
-  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"}}</script>
+  <script>window.location.replace(new URL('movil.html', window.location.href).href);</script>
 </head>
 <body>
-  <div id="ui">
-    <div class="topbar"><div class="brand">UMBRAL<small>Estudio de luz · 01</small></div><div class="status"><i class="dot"></i><span id="statusText">RECORRIDO LIBRE</span></div></div>
-    <div class="crosshair"></div>
-    <div class="bottom"><div class="location">La sala de máquinas<small>Un lugar detenido en el tiempo</small></div><div class="keys"><span><i class="key">W</i><i class="key">A</i><i class="key">S</i><i class="key">D</i> MOVER</span><span class="optional"><i class="key">SHIFT</i> CORRER</span><span class="optional"><i class="key">ESC</i> PAUSA</span></div></div>
-    <div class="vignette"></div>
-  </div>
-  <div id="overlay"><main class="card"><div class="eyebrow">Prototipo interactivo · Three.js</div><h1>Entre la luz<br>y el silencio.</h1><p class="desc">Explora una vieja sala de máquinas donde el polvo, el metal y la madera guardan la memoria del lugar.</p><div class="start"><button id="startButton">Entrar en la sala</button><span>Mejor con auriculares</span></div><div class="instructions"><div><strong>W A S D</strong>Caminar</div><div><strong>RATÓN</strong>Mirar alrededor</div><div><strong>SHIFT</strong>Correr</div><div><strong>ESC</strong>Pausar</div></div></main></div>
-  <script type="module">
-    import * as THREE from 'three';
-    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
-    import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
-    import { SSAOPass } from 'three/addons/postprocessing/SSAOPass.js';
-    import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
-    import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
-
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x777a72);
-    scene.fog = new THREE.FogExp2(0x777a72, 0.022);
-    const camera = new THREE.PerspectiveCamera(73, innerWidth/innerHeight, .08, 100);
-    camera.rotation.order = 'YXZ';
-    camera.position.set(0,1.68,6.4);
-    const renderer = new THREE.WebGLRenderer({antialias:true, powerPreference:'high-performance'});
-    renderer.setPixelRatio(Math.min(devicePixelRatio,1.7)); renderer.setSize(innerWidth,innerHeight);
-    renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.08;
-    renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.physicallyCorrectLights = true;
-    document.body.appendChild(renderer.domElement);
-
-    const composer = new EffectComposer(renderer);
-    composer.addPass(new RenderPass(scene,camera));
-    const ssao = new SSAOPass(scene,camera,innerWidth,innerHeight);
-    ssao.kernelRadius = 11; ssao.minDistance = .003; ssao.maxDistance = .12;
-    composer.addPass(ssao);
-    const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth,innerHeight),.32,.42,.82);
-    composer.addPass(bloom);
-    composer.addPass(new OutputPass());
-
-    function canvasTexture(draw,w=512,h=512,repeatX=1,repeatY=1){
-      const c=document.createElement('canvas');c.width=w;c.height=h;const x=c.getContext('2d');draw(x,w,h);
-      const t=new THREE.CanvasTexture(c);t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(repeatX,repeatY);t.anisotropy=renderer.capabilities.getMaxAnisotropy();return t;
-    }
-    const floorMap=canvasTexture((x,w,h)=>{x.fillStyle='#504c42';x.fillRect(0,0,w,h);for(let i=0;i<17000;i++){const a=Math.random();x.fillStyle=a>.5?`rgba(216,198,160,${Math.random()*.12})`:`rgba(5,8,7,${Math.random()*.24})`;x.fillRect(Math.random()*w,Math.random()*h,1+Math.random()*5,1+Math.random()*2)}for(let i=0;i<25;i++){x.strokeStyle='rgba(20,21,17,.45)';x.lineWidth=1+Math.random()*2;x.beginPath();x.moveTo(Math.random()*w,Math.random()*h);x.lineTo(Math.random()*w,Math.random()*h);x.stroke()}},512,512,5,7);
-    const woodMap=canvasTexture((x,w,h)=>{x.fillStyle='#654a32';x.fillRect(0,0,w,h);for(let i=0;i<600;i++){const y=Math.random()*h;x.strokeStyle=`rgba(${Math.random()>.5?'24,13,6':'225,176,112'},${Math.random()*.17})`;x.lineWidth=Math.random()*3+1;x.beginPath();x.moveTo(0,y);x.bezierCurveTo(w*.35,y+Math.random()*12,w*.7,y-Math.random()*12,w,y+Math.random()*5);x.stroke()}for(let i=0;i<18;i++){x.strokeStyle='rgba(28,18,11,.35)';x.beginPath();x.ellipse(Math.random()*w,Math.random()*h,5+Math.random()*20,2+Math.random()*5,0,0,Math.PI*2);x.stroke()}},512,512,2,1);
-    const plasterMap=canvasTexture((x,w,h)=>{x.fillStyle='#77776c';x.fillRect(0,0,w,h);for(let i=0;i<20000;i++){let v=Math.random();x.fillStyle=v>.5?`rgba(218,210,188,${Math.random()*.12})`:`rgba(19,22,20,${Math.random()*.15})`;x.fillRect(Math.random()*w,Math.random()*h,1+Math.random()*3,1+Math.random()*4)}},512,512,3,1.5);
-    const metalMap=canvasTexture((x,w,h)=>{x.fillStyle='#565b59';x.fillRect(0,0,w,h);for(let i=0;i<8000;i++){x.fillStyle=`rgba(${Math.random()>.55?'210,213,198':'8,11,11'},${Math.random()*.14})`;x.fillRect(Math.random()*w,Math.random()*h,1+Math.random()*2,1)}},256,256,1,1);
-    const floorMat=new THREE.MeshStandardMaterial({map:floorMap,roughness:.88,metalness:.08});
-    const wallMat=new THREE.MeshStandardMaterial({map:plasterMap,roughness:.93,metalness:.02});
-    const woodMat=new THREE.MeshStandardMaterial({map:woodMap,roughness:.79,metalness:.04});
-    const darkWood=new THREE.MeshStandardMaterial({map:woodMap,color:0x746047,roughness:.84});
-    const metalMat=new THREE.MeshStandardMaterial({map:metalMap,color:0x9b9d93,roughness:.34,metalness:.78});
-    const rustMat=new THREE.MeshStandardMaterial({color:0x574133,roughness:.76,metalness:.55});
-    const concrete=new THREE.MeshStandardMaterial({color:0x393c38,roughness:.96,metalness:.02});
-    const brass=new THREE.MeshStandardMaterial({color:0xa9824f,roughness:.3,metalness:.78});
-    const emissive=new THREE.MeshStandardMaterial({color:0xffd49a,emissive:0xffa64a,emissiveIntensity:5,roughness:.2});
-
-    function box(w,h,d,mat,x,y,z,cast=true,receive=true){const m=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),mat);m.position.set(x,y,z);m.castShadow=cast;m.receiveShadow=receive;scene.add(m);return m;}
-    // Sala amplia, con techo de vigas visibles y suelo de hormigón envejecido.
-    box(18,.3,20,floorMat,0,-.16,0,false,true);
-    box(18,6,.35,wallMat,0,3,-10,false,true);box(18,6,.35,wallMat,0,3,10,false,true);
-    box(.35,6,20,wallMat,-9,3,0,false,true);box(.35,6,20,wallMat,9,3,0,false,true);
-    box(18,.25,20,concrete,0,6.05,0,false,true);
-    for(let z=-8;z<=8;z+=4){box(18,.22,.28,darkWood,0,5.75,z);box(.16,5.7,.18,darkWood,-8.7,3,z);box(.16,5.7,.18,darkWood,8.7,3,z)}
-    // Ventanas altas con luz fría de exterior y montantes metálicos.
-    const windowMat=new THREE.MeshStandardMaterial({color:0x9cbbb8,emissive:0x477078,emissiveIntensity:.75,roughness:.22,metalness:.15,transparent:true,opacity:.72});
-    for(const z of [-5,0,5]){box(.06,1.75,2.1,windowMat,-8.79,4.35,z,false,false);box(.12,2,.1,metalMat,-8.68,4.35,z);box(.12,.08,2.2,metalMat,-8.68,4.35,z);box(.1,1.9,.08,metalMat,-8.67,4.35,z-0.7);box(.1,1.9,.08,metalMat,-8.67,4.35,z+.7)}
-    // Ventana del fondo y luz cálida que recorta el polvo.
-    box(3.2,2.1,.07,windowMat,1.8,4.35,-9.78,false,false);
-    for(const x of [.2,1.8,3.4])box(.1,2.2,.12,metalMat,x,4.35,-9.68);
-    box(3.4,.1,.12,metalMat,1.8,4.35,-9.67);
-    const sun=new THREE.DirectionalLight(0xffdfb0,3.3);sun.position.set(-5,8,3);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);sun.shadow.camera.left=-12;sun.shadow.camera.right=12;sun.shadow.camera.top=12;sun.shadow.camera.bottom=-12;sun.shadow.bias=-.00015;sun.shadow.normalBias=.025;sun.shadow.radius=4;scene.add(sun);scene.add(sun.target);
-    scene.add(new THREE.HemisphereLight(0xc9d6d3,0x35312a,1.25));
-    const coolWindow=new THREE.PointLight(0x9ac4cf,65,13,2);coolWindow.position.set(-7.3,4.5,0);scene.add(coolWindow);
-    const farLight=new THREE.PointLight(0xffbd76,95,12,2);farLight.position.set(1.8,4.5,-7);scene.add(farLight);
-    // Lámparas industriales colgantes.
-    const lamps=[];
-    for(const z of [-5,1,7]){const x=-1.5;const cable=new THREE.Mesh(new THREE.CylinderGeometry(.018,.018,1.25,8),rustMat);cable.position.set(x,5.22,z);scene.add(cable);const shade=new THREE.Mesh(new THREE.CylinderGeometry(.18,.48,.28,24,1,true),metalMat);shade.position.set(x,4.55,z);shade.castShadow=true;scene.add(shade);const bulb=new THREE.Mesh(new THREE.SphereGeometry(.11,16,12),emissive);bulb.position.set(x,4.38,z);scene.add(bulb);const light=new THREE.PointLight(0xffb965,120,8,2);light.position.set(x,4.3,z);light.castShadow=z===1; if(light.castShadow){light.shadow.mapSize.set(512,512);light.shadow.bias=-.003;light.shadow.radius=6}scene.add(light);lamps.push(light)}
-    // Tarimas, cajas con vetas y herrajes.
-    function crate(x,y,z,s=1){const group=new THREE.Group();group.position.set(x,y,z);scene.add(group);const body=new THREE.Mesh(new THREE.BoxGeometry(1.15*s,.95*s,1.05*s),woodMat);body.castShadow=true;body.receiveShadow=true;group.add(body);for(const yy of [-.32,.32]){const plank=new THREE.Mesh(new THREE.BoxGeometry(1.18*s,.1*s,1.08*s),darkWood);plank.position.y=yy*s;plank.castShadow=true;group.add(plank)}for(const xx of [-.47,.47]){const brace=new THREE.Mesh(new THREE.BoxGeometry(.09*s,1*s,1.1*s),darkWood);brace.position.x=xx*s;brace.castShadow=true;group.add(brace)}for(const xx of [-.49,.49])for(const yy of [-.38,.38]){const nail=new THREE.Mesh(new THREE.SphereGeometry(.025*s,8,6),brass);nail.position.set(xx*s,yy*s,.56*s);group.add(nail)}return group}
-    crate(-6,.48,-4,1.2);crate(-6,.48,-2,.93);crate(-4.9,1.45,-3,1);crate(6,.48,-6,1.15);crate(6,.48,-4,.9);crate(7,.48,2,1.15);crate(4.8,.48,6,.9);
-    // Banco de trabajo y objetos metálicos.
-    box(3.4,.16,.9,woodMat,5,1.15,-8.25);box(.14,1.15,.14,metalMat,3.55,.55,-8.25);box(.14,1.15,.14,metalMat,6.45,.55,-8.25);box(3.1,.12,.72,metalMat,5,.95,-8.25);
-    for(let i=0;i<5;i++){const tool=box(.08,.035,.42,metalMat,4.05+i*.38,1.27,-8.28,false,false);tool.rotation.y=(i-2)*.08}
-    // Tuberías murales, válvulas y rejillas.
-    for(let i=0;i<3;i++){const pipe=new THREE.Mesh(new THREE.CylinderGeometry(.075,.075,8,16),rustMat);pipe.rotation.z=Math.PI/2;pipe.position.set(0,2.2+i*.34,-9.55);pipe.castShadow=true;scene.add(pipe);for(let x=-7;x<=7;x+=3.5){const clamp=new THREE.Mesh(new THREE.TorusGeometry(.105,.025,8,18),brass);clamp.rotation.y=Math.PI/2;clamp.position.set(x,2.2+i*.34,-9.55);scene.add(clamp)}}
-    const valve=new THREE.Mesh(new THREE.TorusGeometry(.42,.055,12,32),rustMat);valve.position.set(6,2.35,-9.45);valve.rotation.y=Math.PI/2;scene.add(valve);const vh=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,.9,10),brass);vh.position.set(6,2.35,-9.45);vh.rotation.z=Math.PI/2;scene.add(vh);
-    // Bidones envejecidos con aros metálicos.
-    function barrel(x,z){const g=new THREE.Group();g.position.set(x,0,z);scene.add(g);const body=new THREE.Mesh(new THREE.CylinderGeometry(.43,.39,1.22,24,1),rustMat);body.position.y=.61;body.castShadow=true;body.receiveShadow=true;g.add(body);for(const y of [.22,.98]){const ring=new THREE.Mesh(new THREE.TorusGeometry(.405,.035,8,24),metalMat);ring.rotation.x=Math.PI/2;ring.position.y=y;g.add(ring)}return g}
-    barrel(-7,4);barrel(7,-1);barrel(3,3);
-    // Cable enrollado y discos de maquinaria en el suelo.
-    for(let i=0;i<3;i++){const tor=new THREE.Mesh(new THREE.TorusGeometry(.34+i*.09,.025,8,40),rustMat);tor.rotation.x=Math.PI/2;tor.position.set(-3,.045+i*.006,4);tor.castShadow=true;scene.add(tor)}
-    // Polvo iluminado: pocos sprites con movimiento lento.
-    const dustGeo=new THREE.BufferGeometry(),dustCount=190,dustPos=new Float32Array(dustCount*3);for(let i=0;i<dustCount;i++){dustPos[i*3]=(Math.random()-.5)*16;dustPos[i*3+1]=Math.random()*5.4+.3;dustPos[i*3+2]=(Math.random()-.5)*18}dustGeo.setAttribute('position',new THREE.BufferAttribute(dustPos,3));const dust=new THREE.Points(dustGeo,new THREE.PointsMaterial({color:0xe8d8b7,size:.025,transparent:true,opacity:.5,depthWrite:false}));scene.add(dust);
-
-    // Controles FPS con Pointer Lock, aceleración suave y límites de sala.
-    let yaw=0,pitch=0,locked=false,velocity=new THREE.Vector3(),verticalVelocity=0,onGround=true;
-    const keys={};const overlay=document.getElementById('overlay'),statusText=document.getElementById('statusText');
-    document.getElementById('startButton').addEventListener('click',()=>renderer.domElement.requestPointerLock());
-    document.addEventListener('pointerlockchange',()=>{locked=document.pointerLockElement===renderer.domElement;overlay.classList.toggle('hidden',locked);statusText.textContent=locked?'EXPLORANDO':'RECORRIDO LIBRE'});
-    document.addEventListener('mousemove',e=>{if(!locked)return;yaw-=e.movementX*.0022;pitch-=e.movementY*.0022;pitch=THREE.MathUtils.clamp(pitch,-1.45,1.45);camera.rotation.set(pitch,yaw,0)});
-    document.addEventListener('keydown',e=>{keys[e.code]=true;if(['Space','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code))e.preventDefault();if(e.code==='Space'&&onGround&&locked){verticalVelocity=5.1;onGround=false}});
-    document.addEventListener('keyup',e=>keys[e.code]=false);
-    const clock=new THREE.Clock();
-    function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.04),t=clock.elapsedTime;
-      if(locked){const input=new THREE.Vector3((keys.KeyD?1:0)-(keys.KeyA?1:0),0,(keys.KeyS?1:0)-(keys.KeyW?1:0));if(input.lengthSq()>0)input.normalize();const speed=(keys.ShiftLeft||keys.ShiftRight)?5.2:3.25;input.applyAxisAngle(new THREE.Vector3(0,1,0),yaw);const targetX=input.x*speed,targetZ=input.z*speed;velocity.x=THREE.MathUtils.damp(velocity.x,targetX,11,dt);velocity.z=THREE.MathUtils.damp(velocity.z,targetZ,11,dt);camera.position.x=THREE.MathUtils.clamp(camera.position.x+velocity.x*dt,-8.15,8.15);camera.position.z=THREE.MathUtils.clamp(camera.position.z+velocity.z*dt,-9.15,9.15);verticalVelocity-=12.5*dt;camera.position.y+=verticalVelocity*dt;if(camera.position.y<=1.68){camera.position.y=1.68;verticalVelocity=0;onGround=true}}
-      lamps.forEach((l,i)=>{l.intensity=120+Math.sin(t*2.1+i*3)*2.1+Math.sin(t*17+i)*.65});const p=dust.geometry.attributes.position;for(let i=0;i<dustCount;i++){p.array[i*3+1]+=.12*dt;if(p.array[i*3+1]>5.8)p.array[i*3+1]=.25}p.needsUpdate=true;composer.render();}
-    animate();
-    addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);ssao.setSize(innerWidth,innerHeight);bloom.setSize(innerWidth,innerHeight)});
-  </script>
+  <main>
+    <h1>Umbral</h1>
+    <p>Abriendo la experiencia de exploración compatible con móvil…</p>
+    <a href="movil.html">Entrar en la sala</a>
+  </main>
 </body>
 </html>
