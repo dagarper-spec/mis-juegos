@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#101210">
+  <title>Umbral — Exploración</title>
+  <style>
+    *{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#101210;color:#f2eee4;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;touch-action:none}canvas{position:fixed;inset:0;width:100%;height:100%;display:block}.hud{position:fixed;inset:0;z-index:1;pointer-events:none}.brand{position:absolute;top:max(16px,env(safe-area-inset-top));left:18px;font-size:.8rem;letter-spacing:.2em}.brand small{display:block;color:#c5bda9;font-size:.65rem;letter-spacing:.1em;margin-top:3px}.instructions{position:absolute;top:max(18px,env(safe-area-inset-top));right:16px;text-align:right;font-size:.72rem;color:#eee9dd}.crosshair{position:absolute;left:50%;top:50%;width:7px;height:7px;border:1px solid #fff9;border-radius:50%;transform:translate(-50%,-50%)}#controls{position:fixed;inset:0;z-index:2;display:none;pointer-events:none}.pad{position:absolute;left:16px;bottom:max(18px,env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,56px);grid-template-rows:repeat(2,56px);gap:5px;pointer-events:auto}.move{border:1px solid #ffffff70;border-radius:16px;background:#1a1d1ac9;color:#fff;font-size:1.35rem;touch-action:none;user-select:none;-webkit-user-select:none}.move:active,.move.pressed{background:#e4b976;color:#17140f}.forward{grid-column:2;grid-row:1}.left{grid-column:1;grid-row:2}.back{grid-column:2;grid-row:2}.right{grid-column:3;grid-row:2}.look{position:absolute;right:0;top:15%;bottom:0;width:58%;pointer-events:auto;touch-action:none}.look-hint{position:absolute;right:16px;bottom:max(24px,env(safe-area-inset-bottom));font-size:.68rem;color:#ffffffa8;pointer-events:none}.overlay{position:fixed;inset:0;z-index:4;display:grid;place-items:center;padding:22px;background:#080a09d9}.overlay.hidden{display:none}.card{width:min(100%,430px);padding:28px;border:1px solid #ffffff30;border-radius:20px;background:#151813f2;box-shadow:0 20px 70px #0008}.eyebrow{color:#e4b976;font-size:.7rem;letter-spacing:.18em;text-transform:uppercase}h1{font-size:clamp(2rem,8vw,3rem);line-height:1.05;font-weight:500;margin:12px 0}.card p{color:#c5c1b6;line-height:1.55}.start{width:100%;min-height:52px;border:0;border-radius:999px;background:#e4b976;color:#17140f;font-weight:800;font-size:1rem;touch-action:manipulation}.error{color:#ffd0c7!important;font-size:.85rem}@media(pointer:coarse),(max-width:760px){#controls{display:block}.instructions{display:none}.card{padding:22px}.pad{grid-template-columns:repeat(3,50px);grid-template-rows:repeat(2,50px)}}
+  </style>
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"}}</script>
+</head>
+<body>
+  <div class="hud"><div class="brand">UMBRAL<small>RECORRIDO LIBRE</small></div><div class="instructions">WASD / flechas para moverte · Arrastra para mirar</div><div class="crosshair"></div></div>
+  <div id="controls" aria-label="Controles del juego">
+    <div class="pad" aria-label="Movimiento">
+      <button class="move forward" data-key="KeyW" aria-label="Avanzar">▲</button>
+      <button class="move left" data-key="KeyA" aria-label="Mover a la izquierda">◀</button>
+      <button class="move back" data-key="KeyS" aria-label="Retroceder">▼</button>
+      <button class="move right" data-key="KeyD" aria-label="Mover a la derecha">▶</button>
+    </div>
+    <div id="look" class="look" aria-label="Arrastra para mirar"></div><span class="look-hint">ARRASTRA AQUÍ PARA MIRAR</span>
+  </div>
+  <div id="overlay" class="overlay"><main class="card"><div class="eyebrow">Exploración en primera persona</div><h1>Entre la luz<br>y el silencio.</h1><p>Explora una antigua sala de máquinas. En el móvil, mantén pulsadas las flechas de abajo a la izquierda para caminar y arrastra el lado derecho para mirar.</p><button id="start" class="start" type="button">Entrar en la sala</button><p id="error" class="error" role="status" hidden></p></main></div>
+  <script type="module">
+    const errorEl=document.getElementById('error');
+    try {
+      const THREE=await import('three');
+      const scene=new THREE.Scene();scene.background=new THREE.Color(0x777a72);scene.fog=new THREE.Fog(0x777a72,12,30);
+      const camera=new THREE.PerspectiveCamera(73,innerWidth/innerHeight,.08,70);camera.rotation.order='YXZ';camera.position.set(0,1.65,6.4);
+      const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.4));renderer.setSize(innerWidth,innerHeight);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;renderer.outputColorSpace=THREE.SRGBColorSpace;document.body.appendChild(renderer.domElement);
+      scene.add(new THREE.HemisphereLight(0xc9d6d3,0x35312a,2));const sun=new THREE.DirectionalLight(0xffdfb0,3);sun.position.set(-5,9,3);sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);scene.add(sun);const warm=new THREE.PointLight(0xffbd76,90,13,2);warm.position.set(1.8,4.4,-7);scene.add(warm);
+      const material=(color,roughness=.8)=>new THREE.MeshStandardMaterial({color,roughness});const floor=material(0x504c42),wall=material(0x77776c),wood=material(0x654a32),metal=material(0x565b59,.4),beam=material(0x493a2b);
+      function box(w,h,d,m,x,y,z){const obj=new THREE.Mesh(new THREE.BoxGeometry(w,h,d),m);obj.position.set(x,y,z);obj.castShadow=true;obj.receiveShadow=true;scene.add(obj);return obj}
+      box(18,.3,20,floor,0,-.16,0);box(18,6,.35,wall,0,3,-10);box(18,6,.35,wall,0,3,10);box(.35,6,20,wall,-9,3,0);box(.35,6,20,wall,9,3,0);box(18,.25,20,material(0x393c38),0,6.05,0);
+      for(let z=-8;z<=8;z+=4){box(18,.22,.28,beam,0,5.75,z);box(.16,5.7,.18,beam,-8.7,3,z);box(.16,5.7,.18,beam,8.7,3,z)}
+      function crate(x,y,z,s=1){box(1.15*s,.95*s,1.05*s,wood,x,y,z);for(let n=-1;n<=1;n++)box(.06*s,.9*s,.04,beam,x+n*.34*s,y,z+.54*s)}
+      crate(-6,.48,-4,1.2);crate(-6,.48,-2,.93);crate(-4.9,1.45,-3,1);crate(6,.48,-6,1.15);crate(6,.48,-4,.9);crate(7,.48,2,1.15);crate(4.8,.48,6,.9);
+      box(3.4,.16,.9,wood,5,1.15,-8.25);box(.14,1.15,.14,metal,3.55,.55,-8.25);box(.14,1.15,.14,metal,6.45,.55,-8.25);box(3.1,.12,.72,metal,5,.95,-8.25);
+      for(let i=0;i<3;i++){const lamp=new THREE.PointLight(0xffce8a,65,8,2);lamp.position.set(-1.5,4.8,-5+i*6);scene.add(lamp);box(.45,.12,.45,material(0x4c4438),-1.5,5.45,-5+i*6)}
+      let yaw=0,pitch=0,active=false;const pressed=new Set();
+      function look(dx,dy){yaw-=dx*.003;pitch=THREE.MathUtils.clamp(pitch-dy*.003,-1.35,1.35);camera.rotation.set(pitch,yaw,0)}
+      const start=document.getElementById('start'),overlay=document.getElementById('overlay');start.addEventListener('click',()=>{active=true;overlay.classList.add('hidden');if(matchMedia('(pointer:fine)').matches&&renderer.domElement.requestPointerLock)renderer.domElement.requestPointerLock()});
+      document.addEventListener('keydown',e=>{if(['KeyW','KeyA','KeyS','KeyD','ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.code)){pressed.add(e.code);if(e.code.startsWith('Arrow'))e.preventDefault()}});document.addEventListener('keyup',e=>pressed.delete(e.code));window.addEventListener('blur',()=>pressed.clear());
+      document.querySelectorAll('.move').forEach(button=>{const key=button.dataset.key;const release=()=>{pressed.delete(key);button.classList.remove('pressed')};button.addEventListener('pointerdown',e=>{e.preventDefault();button.setPointerCapture(e.pointerId);pressed.add(key);button.classList.add('pressed')});button.addEventListener('pointerup',release);button.addEventListener('pointercancel',release);button.addEventListener('lostpointercapture',release)});
+      document.addEventListener('mousemove',e=>{if(active&&document.pointerLockElement===renderer.domElement)look(e.movementX,e.movementY)});
+      const lookArea=document.getElementById('look');let touchId=null,lastX=0,lastY=0;lookArea.addEventListener('pointerdown',e=>{if(!active)return;touchId=e.pointerId;lastX=e.clientX;lastY=e.clientY;lookArea.setPointerCapture(touchId)});lookArea.addEventListener('pointermove',e=>{if(e.pointerId!==touchId)return;look(e.clientX-lastX,e.clientY-lastY);lastX=e.clientX;lastY=e.clientY});function releaseLook(e){if(e.pointerId===touchId)touchId=null}lookArea.addEventListener('pointerup',releaseLook);lookArea.addEventListener('pointercancel',releaseLook);
+      renderer.domElement.addEventListener('pointerdown',e=>{if(!active||e.pointerType==='touch'||document.pointerLockElement===renderer.domElement)return;touchId=e.pointerId;lastX=e.clientX;lastY=e.clientY;renderer.domElement.setPointerCapture(touchId)});renderer.domElement.addEventListener('pointermove',e=>{if(e.pointerId!==touchId||e.target===lookArea)return;look(e.clientX-lastX,e.clientY-lastY);lastX=e.clientX;lastY=e.clientY});
+      const clock=new THREE.Clock();function animate(){requestAnimationFrame(animate);const dt=Math.min(clock.getDelta(),.04);if(active){const forward=(pressed.has('KeyW')||pressed.has('ArrowUp')?1:0)-(pressed.has('KeyS')||pressed.has('ArrowDown')?1:0),side=(pressed.has('KeyD')||pressed.has('ArrowRight')?1:0)-(pressed.has('KeyA')||pressed.has('ArrowLeft')?1:0);const v=new THREE.Vector3(side,0,-forward);if(v.lengthSq()>1)v.normalize();const speed=3.2*dt,sin=Math.sin(yaw),cos=Math.cos(yaw);camera.position.x+=(v.x*cos+v.z*sin)*speed;camera.position.z+=(-v.x*sin+v.z*cos)*speed;camera.position.x=THREE.MathUtils.clamp(camera.position.x,-8.2,8.2);camera.position.z=THREE.MathUtils.clamp(camera.position.z,-9.1,9.1)}renderer.render(scene,camera)}animate();
+      addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setPixelRatio(Math.min(devicePixelRatio,1.4));renderer.setSize(innerWidth,innerHeight)});
+    } catch(error) {console.error(error);errorEl.hidden=false;errorEl.textContent='No se pudo cargar el juego. Comprueba la conexión e inténtalo de nuevo.';document.getElementById('start').disabled=true}
+  </script>
+</body>
+</html>
